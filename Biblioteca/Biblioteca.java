@@ -1,6 +1,5 @@
 package Biblioteca;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Biblioteca {
@@ -8,18 +7,6 @@ public class Biblioteca {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        ArrayList<Livro> livros = new ArrayList<>();
-        ArrayList<Usuario> usuarios = new ArrayList<>();
-
-        // Livros iniciais
-        livros.add(new Livro("Senhor dos Aneis", "Tolkien", "Fantasia", 1954, 1, true));
-        livros.add(new Livro("Pai Rico Pai Pobre", "Kiyosaki", "Finanças", 1997, 2, true));
-        livros.add(new Livro("A Cabana", "William Young", "Ficção", 2007, 3, true));
-
-        // Usuários iniciais
-        usuarios.add(new Usuario("Ana", 1));
-        usuarios.add(new Usuario("Carlos", 2));
-
         int opcao;
 
         do {
@@ -32,74 +19,40 @@ public class Biblioteca {
             System.out.print("Escolha: ");
             opcao = sc.nextInt();
 
-            switch (opcao) {
+            try {
+                switch (opcao) {
 
-                case 1:
-                    System.out.println("\n--- LIVROS ---");
-                    for (Livro l : livros) {
-                        System.out.println("----------------------");
-                        l.mostrarInformacoes();
-                    }
-                    break;
+                    case 1:
+                        System.out.println("\n--- LIVROS ---");
+                        System.out.println(SupabaseClient.getLivros());
+                        break;
 
-                case 2:
-                    System.out.print("Digite o ID do usuário: ");
-                    int idUsuarioE = sc.nextInt();
-                    System.out.print("Digite o ID do livro: ");
-                    int idLivroE = sc.nextInt();
+                    case 2:
+                        System.out.print("Digite o ID do livro: ");
+                        int idEmprestar = sc.nextInt();
+                        SupabaseClient.emprestarLivro(idEmprestar);
+                        break;
 
-                    Usuario usuarioE = null;
-                    Livro livroE = null;
+                    case 3:
+                        System.out.print("Digite o ID do livro: ");
+                        int idDevolver = sc.nextInt();
+                        SupabaseClient.devolverLivro(idDevolver);
+                        break;
 
-                    for (Usuario u : usuarios)
-                        if (u.getIdentificador() == idUsuarioE) usuarioE = u;
+                    case 4:
+                        System.out.println("\n--- USUÁRIOS ---");
+                        System.out.println(SupabaseClient.getUsuarios());
+                        break;
 
-                    for (Livro l : livros)
-                        if (l.getIdentificador() == idLivroE) livroE = l;
+                    case 0:
+                        System.out.println("Saindo...");
+                        break;
 
-                    if (usuarioE != null && livroE != null) {
-                        usuarioE.pegarLivro(livroE);
-                    } else {
-                        System.out.println("Usuário ou livro não encontrado!");
-                    }
-                    break;
-
-                case 3:
-                    System.out.print("Digite o ID do usuário: ");
-                    int idUsuarioD = sc.nextInt();
-                    System.out.print("Digite o ID do livro: ");
-                    int idLivroD = sc.nextInt();
-
-                    Usuario usuarioD = null;
-                    Livro livroD = null;
-
-                    for (Usuario u : usuarios)
-                        if (u.getIdentificador() == idUsuarioD) usuarioD = u;
-
-                    for (Livro l : livros)
-                        if (l.getIdentificador() == idLivroD) livroD = l;
-
-                    if (usuarioD != null && livroD != null) {
-                        usuarioD.devolverLivro(livroD);
-                    } else {
-                        System.out.println("Usuário ou livro não encontrado!");
-                    }
-                    break;
-
-                case 4:
-                    System.out.println("\n--- USUÁRIOS ---");
-                    for (Usuario u : usuarios) {
-                        System.out.println("----------------------");
-                        u.mostrarInformacoes();
-                    }
-                    break;
-
-                case 0:
-                    System.out.println("Saindo...");
-                    break;
-
-                default:
-                    System.out.println("Opção inválida!");
+                    default:
+                        System.out.println("Opção inválida!");
+                }
+            } catch (Exception e) {
+                System.out.println("❌ Erro: " + e.getMessage());
             }
 
         } while (opcao != 0);
